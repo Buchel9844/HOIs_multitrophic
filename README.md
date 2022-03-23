@@ -1,2 +1,2 @@
 # HOIs_multitrophic
-Code of the article titled "Multitrophic higher-order interactions modulate species persistence" by Lisa Buche, Ignasi Bartomeus and Oscar Godoy. (https://www.biorxiv.org/content/10.1101/2021.11.18.469079v1.abstract) 
+Code of the article titled "Multitrophic higher-order interactions modulate species persistence" by Lisa Buche, Ignasi Bartomeus and Oscar Godoy (https://www.biorxiv.org/content/10.1101/2021.11.18.469079v1.abstract). The HOI_0_wrapper.R contains all the necessary code to compute the coefficients and the AIC for each focal species and situation. The dataframe (i)pollinators.csv, (ii)2016_no_pollinators_for_2017.csv, and (iii)used_data2017.csv are in the data folder. 
