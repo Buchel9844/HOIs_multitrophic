@@ -36,14 +36,16 @@ fit.fecundity.model <- function(
     ##########################################################################################################
     # Description of the different coefficient based on the ecological network
     ##########################################################################################################
+    base.model.formula <- "seeds ~ 1 + year +"
+    
     # A ---- For pairwise competition----
     # all combinaison of plant-plant is possible 
-    all.alphas <- competitors[! competitors %in% pollinator.id]
+    all.alpha <- competitors[! competitors %in% pollinator.id]
     
     # B ---- For mutualistic effect----
     # Combinaison of all plant-pollinator possible 
     all.gama <- competitors[!competitors %in% plant.id]
-    all.gama.typeII <- unlist(lapply(all.gama, function(x){paste0("I(1/(1 + ",x,"))")}))
+    all.gama.typeII <- unlist(lapply(all.gama, function(x){paste0("I(",x,"/(1 + ",x,"))")}))
     
     # C ---- HOIs plant-pollinator-pollinator ----
     if(length(all.gama)>1){
@@ -56,7 +58,7 @@ fit.fecundity.model <- function(
     
     # D ---- HOIs plant-pollinator-plant ----
     ### fit.betas.polinator.on.comp ###
-    HOI_poll_plants <- as.vector(outer(all.gama,all.alpha, paste, sep=":"))
+    HOI_poll_plants <- as.vector(outer(all.gama, all.alpha, paste, sep=":"))
     imp.interaction <- c("Lucilia_sericata:Tomato","Osmia_bicornis:Tomato","Lucilia_sericata:Vicia")
     imp.interaction.no.link <- c("Bombus_terrestris:Raphanus")
     HOI_poll_plants <- HOI_poll_plants[!HOI_poll_plants %in% imp.interaction]
@@ -166,7 +168,7 @@ fit.fecundity.model <- function(
     # mm <- model.matrix(as.formula(model.formula), data)
     
     # separate out the terms that don't have to do with per capita effects
-    # mm.base <- colnames(mm)[which(!colnames(mm) %in% all.alphas & !colnames(mm) %in% all.betas)]
+    # mm.base <- colnames(mm)[which(!colnames(mm) %in% all.alpha & !colnames(mm) %in% all.betas)]
     
     # figure out which columns (i.e. coefficients) to remove to eliminate rank deficiencies using qr decomposition
     # qrmm <- qr(mm)
@@ -250,7 +252,7 @@ fit.fecundity.model <- function(
     # return data.frame and model
     ########################################################################################################## ##################
     
-    order_terms <- c("Intercept","year2017",all.alphas,result.dredge.pol.names,
+    order_terms <- c("Intercept","year2017",all.alpha,result.dredge.pol.names,
                      "Raphanus:Vicia", "Raphanus:Tomato","Tomato:Vicia",
                      HOI_poll_plants)
                    

@@ -3,7 +3,7 @@
 # Import data
 #################################################################################
 #----plant seed and neighboors abundance----
-plant <- read.csv("data/used_data2017.csv")
+plant <- read.csv("HOIs_Lynxc/data/used_data2017.csv")
 plant <- subset(plant,
                   select=c("link" ,"treatment","pot","focal",
                            "background_T","background_R","background_H",
@@ -26,7 +26,7 @@ for ( poll in pollinator.id){
 # str(plant) --> 738 obs. of  16 variables
 
 #---- pollinator abundance----
-plant_with_pollinators <- read.csv("data/pollinators.csv")
+plant_with_pollinators <- read.csv("HOIs_Lynxc/data/pollinators.csv")
 plant_with_pollinators <- data.frame(plant_with_pollinators[102:nrow(plant_with_pollinators),])
 
 # separate the information in the column "measure"
@@ -69,7 +69,7 @@ plant.id <- c("Raphanus","Vicia","Tomato")
 # str(plant_with_pollinators) --> 45 obs. of  5 variables
 
 #----plant seed and neighboors abundance wihtout pollinators----
-plant_no_pollinator <- read.csv("data/2016_no_pollinators_for_2017.csv")
+plant_no_pollinator <- read.csv("HOIs_Lynxc/data/2016_no_pollinators_for_2017.csv")
 
 plant_no_pollinator <- subset(plant_no_pollinator,
                               select=c("link" ,"treatment","pot","focal",
@@ -131,7 +131,7 @@ plant_pollinator_model_fit <- subset(plant_pollinator, select=c("year","treatmen
 names(plant_pollinator_model_fit) <- c("year","treatment", "seeds", "focal", plant.id, pollinator.id)
 
 #plant_pollinator_model_fit$seeds <- ceiling(plant_pollinator_model_fit$seeds)
-plant_pollinator_model_fit<- replace_na(plant_pollinator_model_fit,
+plant_pollinator_model_fit <- replace_na(plant_pollinator_model_fit,
                                         replace = list(Bombus_terrestris = 0,
                                                        Lucilia_sericata = 0,
                                                        Osmia_bicornis = 0))
@@ -150,14 +150,79 @@ plant_pollinator_model_fit$treatment <- as.character(plant_pollinator_model_fit$
 fecundity.data <- list()
 
 #plant_pollinator_model_fit$seeds <- round(plant_pollinator_model_fit$seeds)
+maxplant <- max(plant_pollinator_model_fit$Raphanus,
+                plant_pollinator_model_fit$Vicia,
+                plant_pollinator_model_fit$Tomato)
+maxpol <-max(plant_pollinator_model_fit$Bombus_terrestris,
+    plant_pollinator_model_fit$Lucilia_sericata,
+    plant_pollinator_model_fit$Osmia_bicornis)
 
+maxpol.log <- max(log(plant_pollinator_model_fit$Bombus_terrestris),
+              log(plant_pollinator_model_fit$Lucilia_sericata),
+              log(plant_pollinator_model_fit$Osmia_bicornis))
+
+VR.plot <- list()
 for(plant.spc in plant.id){
  df.of.focal <-  as.data.frame(subset(plant_pollinator_model_fit,
                          plant_pollinator_model_fit$focal == plant.spc))
-fecundity.data[[paste(plant.spc,"with_link", sep="_")]] <- df.of.focal[!df.of.focal$treatment %in% treatment.no.link, ]
-fecundity.data[[paste(plant.spc,"no_link", sep="_")]] <- df.of.focal[!df.of.focal$treatment %in% treatment.with.link, ]
-
+ #df.of.focal$Raphanus <- df.of.focal$Raphanus/maxplant
+ #df.of.focal$Vicia <- df.of.focal$Vicia/ maxplant
+ #df.of.focal$Tomato <- df.of.focal$Tomato/ maxplant
+ df.of.focal.test <-  df.of.focal 
+ df.of.focal.test$Bombus_terrestris.log <- (log(df.of.focal$Bombus_terrestris)/ maxpol.log)*maxplant
+ df.of.focal.test$Lucilia_sericata.log <- (log(df.of.focal$Lucilia_sericata)/ maxpol.log)*maxplant
+ df.of.focal.test$Osmia_bicornis.log <- (log(df.of.focal$Osmia_bicornis)/maxpol.log)*maxplant
+ 
+ df.of.focal.test$Bombus_terrestris.log[which( df.of.focal.test$Bombus_terrestris.log < -1)] <- -1
+ df.of.focal.test$Bombus_terrestris.log <-  df.of.focal.test$Bombus_terrestris.log +1
+ df.of.focal.test$Lucilia_sericata.log[which( df.of.focal.test$Lucilia_sericata.log < -1)] <- -1
+ df.of.focal.test$Lucilia_sericata.log <-   df.of.focal.test$Lucilia_sericata.log + 1
+ df.of.focal.test$Osmia_bicornis.log[which( df.of.focal.test$Osmia_bicornis.log < -1)] <- -1
+ df.of.focal.test$Osmia_bicornis.log <-   df.of.focal.test$Osmia_bicornis.log +1
+ 
+ 
+ df.of.focal.test$Bombus_terrestris.std <- (df.of.focal$Bombus_terrestris/ maxpol)*maxplant
+ df.of.focal.test$Lucilia_sericata.std <- (df.of.focal$Lucilia_sericata/ maxpol)*maxplant
+ df.of.focal.test$Osmia_bicornis.std <- (df.of.focal$Osmia_bicornis/maxpol)*maxplant
+ 
+ 
+ VR.plot[[plant.spc]] <- ggplot(df.of.focal.test) + 
+   geom_smooth(aes(y=seeds, x=(Bombus_terrestris+
+                                 Lucilia_sericata+
+                                 Osmia_bicornis),
+                   colour= "1 - Original distribution V")) +
+   
+   geom_smooth(aes(y=seeds, x=(Bombus_terrestris.std+
+                                Lucilia_sericata.std+
+                                Osmia_bicornis.std),
+                   colour="2- {V divided by max(V)}* max(plant abundance)")) + 
+   #xlim(c(0,5)) + 
+   #ylim(c(0,100)) + 
+   geom_smooth(aes(y=seeds, x=(Bombus_terrestris.log+
+                                 Lucilia_sericata.log+
+                                 Osmia_bicornis.log),
+                   colour="3- {log(V) divided by max(log(V))}* max(plant abundance)")) +
+   scale_colour_manual(name="standardisation", values=c("blue", "orange","black")) +
+   theme_bw() + ggtitle(plant.spc) +
+   xlab("Visitations rate")
+ 
+ 
+ df.of.focal$Bombus_terrestris <-  df.of.focal.test$Bombus_terrestris.log
+ df.of.focal$Lucilia_sericata <-  df.of.focal.test$Lucilia_sericata.log
+ df.of.focal$Osmia_bicornis <-  df.of.focal.test$Osmia_bicornis.log
+ 
+ fecundity.data[[paste(plant.spc,"with_link", sep="_")]] <- df.of.focal[!df.of.focal$treatment %in% treatment.no.link, ]
+ fecundity.data[[paste(plant.spc,"no_link", sep="_")]] <- df.of.focal[!df.of.focal$treatment %in% treatment.with.link, ]
+ 
 }
+
+save(fecundity.data,
+     file = "HOIs_Lynxc/results/fecundity_data.RData")
+
+
+ggplot2::ggsave("HOIs_Lynxc/results/VisitationRate_standardisation.pdf",
+  ggarrange(plotlist = VR.plot, common.legend = T, legend="bottom"),
+  width = 11.20,height = 5.56, units = "in")
 # Check 6
 # levels(as.factor(fecundity.data$Raphanus_no_link$treatment)) --> c("B_x","BB_x","BF_x","F","F_low","FF","NO_P","OB_x")
 # OR length(levels(as.factor(fecundity.data$Raphanus_no_link$treatment))) -->  8
@@ -165,8 +230,10 @@ fecundity.data[[paste(plant.spc,"no_link", sep="_")]] <- df.of.focal[!df.of.foca
 # Save new data frame
 #################################################################################
 View(plant_pollinator)
-write_csv(plant_pollinator,
-          file.path("~/Code/Project/lincx/analysis/HOI/Results","plant_pollinator_2016_2017.csv"), 
+write.table(plant_pollinator,
+          file.path("HOIs_Lynxc/results/plant_pollinator_2016_2017.csv"), 
           na = "NA", append = F,
-          col_names =TRUE)
+          col.names =TRUE)
+fecundity.data$Raphanus_with_link
+
 

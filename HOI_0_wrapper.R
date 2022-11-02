@@ -7,56 +7,56 @@
 # Import package
 #################################################################################
 #rm(list = ls(all = TRUE))
-if(!require(tidyverse)) {install.packages("tidyverse"); library(tidyverse)}
-if(!require(ggplot2)) {install.packages("ggplot2"); library(ggplot2)}
-if(!require(cowplot)) {install.packages("cowplot"); library(cowplot)}
-if(!require(grid)) {install.packages("grid"); library(grid)}
-if(!require(ggpubr)) {install.packages("ggpubr"); library(ggpubr)}
-if(!require(gtable)) {install.packages("gtable"); library(gtable)}
-if(!require(RcmdrMisc)) {install.packages("RcmdrMisc"); library(RcmdrMisc)}
-if(!require(dplyr)) {install.packages("dplyr"); library(dplyr)}
-if(!require(ggthemes)) {install.packages("ggthemes"); library(ggthemes)}
-if(!require(vegan)) {install.packages("vegan"); library(vegan)}
-# for the procrustes fonction
-if(!require(scatterplot3d)) {install.packages("scatterplot3d"); library(scatterplot3d)}
-if(!require(mvtnorm)) {install.packages("mvtnorm"); library(mvtnorm)}
-if(!require(igraph)) {install.packages("igraph"); library(igraph)}
-if(!require(plyr)) {install.packages("plyr"); library(plyr)}
-if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
-if(!require(viridis)) {install.packages("viridis"); library(viridis)}
-if(!require(scales)) {install.packages("scales"); library(scales)}
-if(!require(deSolve)) {install.packages("deSolve"); library(deSolve)}
-if(!require(diffeqr)) {install.packages("diffeqr"); library(diffeqr)}
-if(!require(JuliaCall)) {install.packages("JuliaCall"); library(JuliaCall)}
-if(!require(boot)) {install.packages("boot"); library(boot)}
-if(!require(ggplotify)) {install.packages("ggplotify"); library(ggplotify)}
-if(!require(corrplot)) {install.packages("corrplot"); library(corrplot)}
-if(!require(RColorBrewer)) {install.packages("RColorBrewer"); library(RColorBrewer)}
-if(!require(scales)) {install.packages("scales"); library(scales)}
-if(!require(ggsci)) {install.packages("ggsci"); library(ggsci)}
-if(!require(ggtern)) {install.packages("ggtern"); library(ggtern)}
-if(!require(MuMIn)) {install.packages("MuMIn"); library(MuMIn)}
-if(!require(glmmADMB)) {install.packages("glmmADMB"); library(glmmADMB)} # for the neg binomial
-if(!require(MASS)) {install.packages("MASS"); library(MASS)} # for the neg binomial
+{install.packages("tidyverse");library(tidyverse)}
+{install.packages("dplyr");library(dplyr)}
+{install.packages("plyr");library(plyr)}
+{install.packages("ggplot2"); library(ggplot2)}
+{install.packages("ggthemes");library(ggthemes)}
+{install.packages("tibble");library(tibble)}
+#library(cowplot)
+#library(grid)
+#library(ggpubr)
+# library(gtable)
+{install.packages("RcmdrMisc");library(RcmdrMisc)}
+{install.packages("vegan");library(vegan)} # for the procrustes fonction
+{install.packages("scatterplot3d"); library(scatterplot3d)}
+{install.packages("mvtnorm"); library(mvtnorm)}
+{install.packages("igraph"); library(igraph)}
+#{install.packages("plyr"); library(plyr)}
+#if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
+{install.packages("viridis"); library(viridis)}
+{install.packages("scales"); library(scales)}
+{install.packages("deSolve"); library(deSolve)}
+{install.packages("diffeqr"); library(diffeqr)}
+{install.packages("JuliaCall"); library(JuliaCall)}
+{install.packages("boot"); library(boot)}
+{install.packages("ggplotify"); library(ggplotify)}
+{install.packages("corrplot"); library(corrplot)}
+{install.packages("RColorBrewer"); library(RColorBrewer)}
+{install.packages("ggsci"); library(ggsci)}
+{install.packages("ggtern"); library(ggtern)}
 
-
+{install.packages("MASS"); library(MASS)} # for the neg binomial
+{install.packages("MuMIn"); library(MuMIn)} # for the dredge function
+library(ggpubr)
+library(cowplot)
 # if using "negbin-mm", you must install the "glmmADMB" packages
-#install.packages("glmmADMB", 
-#                 repos=c("http://glmmadmb.r-forge.r-project.org/repos",
-#                        getOption("repos")),
-#                type="source")
+{install.packages("glmmADMB", 
+                 repos=c("http://glmmadmb.r-forge.r-project.org/repos",
+                        getOption("repos")),
+                type="source"); 
+  library(glmmADMB)} # for the neg binomial
 
-setwd("/Users/lisabuche/Code/Project/lincx")
 
 ################################################################################
 # A. Import the Data
-#################################################################################
-
+################################################################################
+setwd("~/Eco_Bayesian")
 # read in the Fusion_Dataframe, this will create a list (fecundity.data) 
 #with two dataframes for each focal species, with and without the link
 # check if the fecunfity.data is a list of 6 elements ( 6 data_frames)
 #rm(list=ls()) # remove all variable from the environement before starting the computation
-source('analysis/HOI/Code/HOI_1_Fusion_Dataframe.R')
+source('HOIs_Lynxc/HOI_1_Fusion_Dataframe.R')
 # the code contains check to facilitate the identification of potential mistakes
 
 ################################################################################
@@ -119,7 +119,7 @@ dredge.function <- function(data,spcs,netwk){
     all.alpha <- competitors[!competitors %in% pollinator.id]
     all.gama <- competitors[!competitors %in% plant.id]
     
-    all.gama.typeII <- unlist(lapply(all.gama, function(x){paste0("I(1/(1 + ",x,"))")}))
+    all.gama.typeII <- unlist(lapply(all.gama, function(x){paste0("I(",x,"/(1 + ",x,"))")}))
     
     # For HOI on mutualistic effects-- two pollinators ----
     
@@ -167,7 +167,7 @@ dredge.function <- function(data,spcs,netwk){
     # drop extraneous levels that could complicate the model-fitting code
     data$year <- as.factor(data$year)
     #data$year <- droplevels(data$year)
-    levels(data$year)
+    #levels(data$year)
     
     ##########################################################################################################
     # Model with only the Pairwise interactions
@@ -191,7 +191,8 @@ dredge.function <- function(data,spcs,netwk){
     
     result.dredge.pol <- as.data.frame(full_join(as.data.frame(coef(Models.pol)),
                                                  as.data.frame(model.sel(Models.pol)))) ##Final model selection table
-  
+    result.dredge.pol <- subset( result.dredge.pol, select=-c(year))
+    
     for (n.poll  in 1:length(all.gama)){
         result.dredge.pol <-result.dredge.pol[which((is.na(result.dredge.pol[,all.gama[n.poll]])  &
                                                          !is.na(result.dredge.pol[,all.gama.typeII[n.poll]])) 
@@ -242,6 +243,8 @@ dredge.function <- function(data,spcs,netwk){
     
     result.dredge <- as.data.frame(full_join(as.data.frame(coef(Allmodels)),
                                              as.data.frame(model.sel(Allmodels)))) ##Final model selection table
+   
+    result.dredge <- subset( result.dredge, select=-c(year))
     result.dredge.initial <- result.dredge
 
     result.dredge.long <- subset(result.dredge, 
@@ -264,12 +267,11 @@ dredge.function <- function(data,spcs,netwk){
     #names(result.dredge)[which(names(result.dredge) %in% all.gama.typeII)] <-  all.gama[which(all.gama.typeII %in% names.to.change)]
     
     return(list(result.dredge.initial =result.dredge.initial,
-                best.model.result= result.dredge,
-                best.model.result.long= result.dredge.long,
+                best.model.result = result.dredge,
+                best.model.result.long = result.dredge.long,
                 best.model = model.dredge, 
                 best.funct.rest.result=result.dredge.pol, 
-                best.funct.rest.result.model = model.dredge.pol,
-                plot= plot.function.type))
+                best.funct.rest.result.model = model.dredge.pol))
     
     
 }
@@ -314,18 +316,20 @@ dredge.df.no.HOIs$model <- "no_HOIs"
 dredge.df.with.HOIs$model <- "with_HOIs"
 dredge.df.with.HOIs.long$model <- 'with_HOIS'
 dredge.df <- bind_rows(dredge.df.with.HOIs,dredge.df.no.HOIs)
-view(dredge.df)
+View(dredge.df)
 
 HOI_plants_poll <- c("Bombus_terrestris:Raphanus","Bombus_terrestris:Tomato","Bombus_terrestris:Vicia",
                      "Lucilia_sericata:Raphanus","Osmia_bicornis:Vicia" ,
                      "Osmia_bicornis:Raphanus" )
+
+
 
 HOI_plants <- c("Raphanus:Tomato","Tomato:Vicia","Raphanus:Vicia")
 
 HOI_poll <- c("Bombus_terrestris:Osmia_bicornis","Bombus_terrestris:Lucilia_sericata",
               "Lucilia_sericata:Osmia_bicornis")
 
-pollinator.id.typeII <- unlist(lapply(pollinator.id, function(x){paste0("I(1/(1 + ",x,"))")}))
+pollinator.id.typeII <- unlist(lapply(pollinator.id, function(x){paste0("I(",x,"/(1 + ",x,"))")}))
 
 
 col.order <-c( "model","species","network","df","AIC","BIC","logLik","max.r","delta","weight","Intercept","year2017",
@@ -334,34 +338,30 @@ names(dredge.df.with.HOIs.long )[!names(dredge.df.with.HOIs.long ) %in% col.orde
 
 #names(dredge.df)[which(!names(dredge.df) %in% col.order)]
 dredge.df <- dredge.df[,col.order]
-dredge.df.with.HOIs.long <- dredge.df.with.HOIs.long[,col.order]
+#dredge.df.with.HOIs.long <- dredge.df.with.HOIs.long[,col.order]
+names(dredge.df.with.HOIs.long)[!names(dredge.df.with.HOIs.long) %in% col.order]
 
 
-write_csv(dredge.df,
-          file.path("analysis/HOI/Results",
-                    "dredge.result.csv"), 
+write.table(dredge.df,
+          file.path("HOIs_Lynxc/results/dredge.result.csv"), 
           na = "NA", append = F,
-          col_names =TRUE)
+          col.names =TRUE)
 
 
-
-
-
-write_csv(dredge.df.with.HOIs.long,
-          file.path("analysis/HOI/Results",
-                    "dredge.df.with.HOIs.long.csv"), 
+write.table(dredge.df.with.HOIs.long,
+          file.path("HOIs_Lynxc/results/dredge.df.with.HOIs.long.csv"), 
           na = "NA", append = F,
-          col_names =TRUE)
+          col.names =TRUE)
 
 
-ggsave("analysis/HOI/Figures/plot.functional.response.pdf",
-       ggarrange(plotlist = plot.pol, nrow=3, ncol=2))
+#ggsave("analysis/HOI/Figures/plot.functional.response.pdf",
+#       ggarrange(plotlist = plot.pol, nrow=3, ncol=2))
 
 # ---- 3. Full models  ----
 
 # read in the model-fitting function - function provided with manuscript
 # check if the fit.fecundity is a function 
-source('analysis/HOI/Code/HOI_2_fit_fecunfity_model.R')
+source('HOIs_Lynxc/HOI_2_fit_fecunfity_model.R')
 full_model_Coefficient <- data.frame()
 full.model.of.plant.spc <- list()
 for( plant.spc in plant.id){
@@ -395,10 +395,10 @@ names(dredge.df)
 names(full_model_Coefficient)[!which(names(full_model_Coefficient) %in% names(dredge.df))]
 
 all.coeff <- full_join(dredge.df,full_model_Coefficient)
-View(all.coeff)
-#view(all.coeff)
 
-all.coeff <- all.coeff %>%
+#view(all.coeff)
+all.coeff.newnames <- all.coeff
+all.coeff.newnames <- all.coeff.newnames %>%
     mutate(species=case_when(species == "Raphanus" ~  "Radish",
                            species == "Vicia"  ~  "Field bean" ,
                            species== "Tomato" ~  "Tomato")) %>% 
@@ -410,23 +410,25 @@ all.coeff <- all.coeff %>%
                             model == "full_model" ~  "All HOIs"
     ))
 
-all.coeff <- arrange(transform(all.coeff,
+all.coeff.newnames <- arrange(transform(all.coeff.newnames,
                                model=factor(model,level=c("Pairwise interactions","Selected HOIs","All HOIs"))),
                      model)
 
-all.coeff <- arrange(transform(all.coeff,
+all.coeff.newnames <- arrange(transform(all.coeff.newnames,
                                network=factor(network,level=c("Nested structure","Link physically prevented"))),
                      network)
 
-all.coeff <- arrange(transform(all.coeff,
+all.coeff.newnames <- arrange(transform(all.coeff.newnames,
                                species=factor(species,level=c("Radish","Field bean","Tomato"))),
                      species)
-all.coeff <- all.coeff %>% mutate_if(is.numeric, round, digits=3)
-write_csv(all.coeff,
-          file.path("analysis/HOI/Results",
+all.coeff.newnames <- all.coeff.newnames%>% mutate_if(is.numeric, round, digits=3)
+write.table(all.coeff,
+          file.path("HOIs_Lynxc/results",
                     "all.coeff.csv"), 
           na = "NA", append = F,
-          col_names =TRUE)
+          col.names =TRUE)
+
+#all.coeff <- read.csv("HOIs_Lynxc/results/all.coeff.csv",sep=' ')
 
 # ---- graph of both type of response ----
 data.raphanus <- fecundity.data[[paste("Raphanus", "with_link", sep="_")]]
@@ -435,25 +437,28 @@ raphanus.model.type <- fit.fecundity.model(data.raphanus,
 
 data.raphanus$fitted.value.type.II <-  raphanus.model.type$model.type.II$fitted.values
 data.raphanus$fitted.value.type.I <-  raphanus.model.type$model.type.I$fitted.values
-data.raphanus$visit <- data.raphanus$Bombus_terrestris + data.raphanus$Lucilia_sericata + data.raphanus$Osmia_bicornis
-write_csv(data.raphanus,
-          file.path("analysis/HOI/Results",
+data.raphanus$visit <- exp((data.raphanus$Bombus_terrestris-1)*(maxpol.log/maxplant)) + exp((data.raphanus$Lucilia_sericata -1)*(maxpol.log/maxplant)) + exp((data.raphanus$Osmia_bicornis-1)*(maxpol.log/maxplant))
+
+write.table(data.raphanus,
+          file.path("HOIs_Lynxc/results",
                     "data.raphanus.csv"), 
           na = "NA", append = F,
-          col_names =TRUE)
+          col.names =TRUE)
 
 plot.function.type <- ggplot(data=data.raphanus, aes(y=seeds)) +
     
     #geom_abline(intercept = 0, slope = 1) +
     #geom_abline(intercept = 0, slope = summary(model.dredge.pol)$dispersion,
     #            color="green") +
-    stat_smooth(aes(x=visit),method="loess", se = FALSE,color="red") +
+    stat_smooth(aes(x=visit), method="loess", se = FALSE,color="red") +
     xlab("Visitation rate") + ylab(paste("seeds of",spcs)) +
     stat_smooth(aes(x=fitted.value.type.I),method="loess", se = FALSE,color="green") +
     stat_smooth(aes(x=fitted.value.type.II),method="loess", se = FALSE,color="blue") +
 
     theme_bw() 
-view(data.raphanus)
+ggsave("HOIs_Lynxc/results/plot.function.type.pdf",
+       plot.function.type)
+
 
 ##########################################################################################################
 # C. Dredge interaction matrix
@@ -506,9 +511,9 @@ for(network in  c("with_link", "no_link")){
                                                    all.coeff$model == HOIs),
                                          HOI_plants[grepl(plant.comp,HOI_plants)]]),na.rm = T)
             
-            # extraction of standar error 
-            vec <- c(plant.comp,HOI_poll_plants[grepl(plant.comp,HOI_poll_plants)],
-                     HOI_plants_plants[grepl(plant.comp,HOI_plants_plants)])
+            # extraction of standard error 
+            vec <- c(plant.comp,HOI_plants_poll[grepl(plant.comp,HOI_plants_poll)],
+                     HOI_plants[grepl(plant.comp,HOI_plants)])
 
             if (HOIs == "with_HOIs"){ mat.cov <- stats::vcov(full.model.of.plant.spc[[paste(plant.comp,network,sep="_")]]$model)}
             if (HOIs == "no_HOIs"){ mat.cov <- stats::vcov(dredge.model.no.HOIs[[paste(plant.comp,network,sep="_")]])}
@@ -562,12 +567,9 @@ for(network in  c("with_link", "no_link")){
 }
 }
 
-Coefficients_alpha_r$with_link_with_HOIs$matrix_HOIs + Coefficients_alpha_r$with_link_with_HOIs$direct_int
-
-
 # ---- 2. Compute Omega, centroid, theta, fesibileity domaine , test_feasibility_pairs and compute_overlap ----
 
-source('analysis/HOI/Code/HOI_3_Function_fit_alpha_r.R')
+source('HOIs_Lynxc/HOI_3_Function_fit_alpha_r.R')
 for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
     for(network in  c("with_link", "no_link")){
         alpha <- Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$alpha
@@ -584,11 +586,17 @@ for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
     }
 }
 
+# ---- 3. save data in RData file ----
+save(     Coefficients_alpha_r, 
+          file="HOIs_Lynxc/results/Coefficients_alpha_r.RData")
+#load("HOIs_Lynxc/results/Coefficients_alpha_r.RData")
+
+
 ################################################################################
 # D. Persistence of species 
 ################################################################################
 # the function to create the graphs has been developped by W. Petry
-source('analysis/HOI/Code/HOI_11_pesistence.R')
+source('HOIs_Lynxc/HOI_11_pesistence.R')
 
 
 ################################################################################
@@ -598,7 +606,7 @@ source('analysis/HOI/Code/HOI_11_pesistence.R')
 # ----1. Interaction network plot ----
 
 # the function to create the graphs has been developped by W. Petry
-source('analysis/HOI/Code/HOI_10_Graphs_WPettry.R')
+source('HOIs_Lynxc/HOI_10_Graphs_WPettry.R')
 
 Interaction_network <- list()
 for(network in  c("with_link", "no_link")){
@@ -607,7 +615,7 @@ for(network in  c("with_link", "no_link")){
         mk_graph_3sp(Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$alpha, 
                      Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$r)
         Interaction_network[[paste(network,HOIs,sep='_')]] <- last_plot()
-        ggsave(paste0("analysis/HOI/Figures/","network_interaction_", network,HOIs,".pdf"),
+        ggsave(paste0("HOIs_Lynxc/results/","network_interaction_", network,HOIs,".pdf"),
                last_plot(),
                width = 2.6,height = 2.6, units = "in")
     }
@@ -615,14 +623,12 @@ for(network in  c("with_link", "no_link")){
 
 plot.sp.interaction.with_link <- ggarrange(plotlist=Interaction_network[1:3],ncol=3,nrow=1)
 
-ggsave("analysis/HOI/Figures/plot.sp.interaction.with_link.pdf",
+ggsave("HOIs_Lynxc/results/plot.sp.interaction.with_link.pdf",
        plot.sp.interaction.with_link, height = 3, width = 9, units = "in")
 
 plot.sp.interaction.network <- ggarrange(plotlist=Interaction_network[4:6],ncol=3,nrow=1)
-ggsave("analysis/HOI/Figures/plot.sp.interaction.no_link.pdf",
+ggsave("HOIs_Lynxc/results/plot.sp.interaction.no_link.pdf",
        plot.sp.interaction.network,  height = 3, width = 9, units = "in")
-
-
 
 # ----2. Graph of the effect of direct int vs HOIs -----
 
@@ -760,8 +766,8 @@ graph.dredge.interaction <- arrange(transform(graph.dredge.interaction,
 graph.dredge.interaction <- drop_na(graph.dredge.interaction,value.sd)
 
 view(graph.dredge.interaction)
-write_csv(graph.dredge.interaction,
-          path="/Users/lisabuche/Code/Project/lincx/analysis/HOI/Results/graph.dredge.interaction.csv")
+write.table(graph.dredge.interaction,
+          "HOIs_Lynxc/results/graph.dredge.interaction.csv")
 # ---- 2.a. Test for diff between sd and HOIs effect ----
 graph.dredge.interaction.alpha <- graph.dredge.interaction[graph.dredge.interaction$effect=="alpha",]
 graph.dredge.interaction.beta.pol <- graph.dredge.interaction[graph.dredge.interaction$effect=="beta.pol",]
@@ -830,8 +836,8 @@ for(HOIs in  c("Pairwise interactions","Selected HOIs","All HOIs")){
     }
 }
 view(df.effect.HOIs)
-write_csv(df.effect.HOIs,
-          path="/Users/lisabuche/Code/Project/lincx/analysis/HOI/Results/df.effect.HOIs.csv")
+write.table(df.effect.HOIs,
+          "HOIs_Lynxc/results/df.effect.HOIs.csv")
 
 
 # ---- 2.b. Final values of alpha matrix ----
@@ -863,7 +869,8 @@ coefficient.dredge_comparison <- gather(coefficient.dredge_comparison , all_of(p
 coefficient.dredge_comparison.sd <- gather(coefficient.dredge_comparison.sd ,all_of(plant.id), 
                                            key = "competitor", value = "alpha.sd")
 
-coefficient.dredge_comparison.full <- merge(coefficient.dredge_comparison,coefficient.dredge_comparison.sd)
+coefficient.dredge_comparison.full <- merge(coefficient.dredge_comparison,
+                                            coefficient.dredge_comparison.sd)
 
 coefficient.dredge_comparison.full <- coefficient.dredge_comparison.full %>%
     mutate(competitor.2 =case_when(competitor == "Raphanus" ~  "Radish",
@@ -890,8 +897,8 @@ coefficient.dredge_comparison.full$sign.int <- "Net competition"
 coefficient.dredge_comparison.full[which(coefficient.dredge_comparison.full$alpha > 0),"sign.int"] <- "Net facilitation"
 
 
-write_csv(coefficient.dredge_comparison.full,
-          path="/Users/lisabuche/Code/Project/lincx/analysis/HOI/Results/coefficient.dredge_comparison.full.csv")
+write.table(coefficient.dredge_comparison.full,
+          "HOIs_Lynxc/results/coefficient.dredge_comparison.full.csv")
 
 # ---- 2.c. Plot ----
 
@@ -935,7 +942,7 @@ effect.dredge_interaction <- ggplot() + geom_bar(stat="identity",
     theme(axis.text.x = element_text(angle = 68,vjust = 0.5),
           strip.background=element_rect(fill="white", color="white"),
           strip.text = element_text(size=10)) 
-ggsave("analysis/HOI/Figures/effect.dredge_interaction.pdf",
+ggsave("HOIs_Lynxc/results/effect.dredge_interaction.pdf",
        effect.dredge_interaction,height = 8.27, width = 15.69, units = "in")
 
 
@@ -944,9 +951,9 @@ graph.dredge.interaction <- arrange(transform(graph.dredge.interaction,
                             effect)
 graph.dredge.interaction 
 Overall_effect_HOIs <- ggplot(data=graph.dredge.interaction,
-                              aes(y=abs(value), x=focal,color=effect)) + 
+                              aes(y=abs(value), x=focal,fill=effect)) + 
     geom_boxplot(position = position_dodge(width = 1)) +
-    geom_pointrange(aes(ymax=(abs(value) + abs(value.sd)),
+    geom_pointrange(aes(color=effect, ymax=(abs(value) + abs(value.sd)),
                             ymin=(abs(value) - abs(value.sd))
                       ),
                   position = position_dodge(width = 1)) +
@@ -954,29 +961,22 @@ Overall_effect_HOIs <- ggplot(data=graph.dredge.interaction,
     scale_color_manual(name="",
                       values=c("#E64B35FF","#4DBBD5FF","#00A087FF"),
                       labels=c("Pairwise interaction", "HOIs pollinator","HOIs plant")) + 
-    theme(axis.text.x = element_text(face = "italic"),legend.position = "bottom")
-
-
-
-Overall_effect_HOIs <- ggplot(data=graph.dredge.interaction,
-                              aes(y=abs(value), x=focal,fill=effect)) + 
-    geom_boxplot(aes(y=abs(value), x=focal)) + 
-    ylab("absolute value of the effect") + 
-    theme_bw()   +  
     scale_fill_manual(name="",
-                      values=c("#E64B35FF","#00A087FF","#4DBBD5FF"),
-                      labels=c("Pairwise interaction","HOIs plant","HOIs pollinator")) + 
+                     values=alpha(c("#E64B35FF","#4DBBD5FF","#00A087FF"),0.5),
+                     labels=c("Pairwise interaction", "HOIs pollinator","HOIs plant")) + 
+  ylab("absolute value of the effect") + 
     theme(axis.text.x = element_text(face = "italic"),legend.position = "bottom")
 
 
-ggsave("/Users/lisabuche/Code/Project/lincx/analysis/HOI/Figures/Overall_effect_HOIs.pdf",
+
+ggsave("HOIs_Lynxc/results/Overall_effect_HOIs.pdf",
        Overall_effect_HOIs, height = 7.27, width = 8.69, units = "in")
 
 # ----3. Graph of the persistence ----
 df_prob_surv <- data.frame()
 for ( network in   c("with_link","no_link")){
     for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
-        df_surv_i <-read.csv(paste0("analysis/HOI/Results/probability_surv_sp_", paste(network,HOIs,sep="_"), 
+        df_surv_i <-read.csv(paste0("HOIs_Lynxc/results/probability_surv_sp_", paste(network,HOIs,sep="_"), 
                                     ".csv", sep = ""))
         df_surv_i$model <-  HOIs 
         df_surv_i$network <-network
@@ -991,8 +991,8 @@ df_prob_surv<- arrange(transform(df_prob_surv,
                                  model=factor(model,level=c("no_HOIs","with_HOIs","full_model"))),
                        model)
 
-write_csv(df_prob_surv,
-          path="/Users/lisabuche/Code/Project/lincx/analysis/HOI/Results/df_prob_surv.csv")
+write.table(df_prob_surv,
+          "HOIs_Lynxc/results/df_prob_surv.csv")
 
 #df_prob_surv <- subset(df_prob_surv,model== model.name[1])
 df_prob_surv$network <- as.factor(df_prob_surv$network)
@@ -1021,7 +1021,7 @@ plot_prob_surv <- ggplot(df_prob_surv, aes(y=frac, x= sp, fill=model,
     guides(color= "none",fill = guide_legend(override.aes = list(alpha=0.6)))
 
 
-ggsave("analysis/HOI/Figures/plot_prob_surv.pdf",
+ggsave("HOIs_Lynxc/results/plot_prob_surv.pdf",
        plot_prob_surv, height = 3.68, width = 8.51, units = "in")
 
 
@@ -1030,7 +1030,7 @@ ggsave("analysis/HOI/Figures/plot_prob_surv.pdf",
 
 
 # ----4. Graph of the visitation rates----
-str(plant_pollinator_model_fit_visit)
+str(plant_pollinator_model_fit)
 str(plant_with_pollinators)
 treat <-levels(as.factor(plant_pollinator_model_fit$treatment))
 treat <- treat[!treat %in% treatment.no.link]
@@ -1054,11 +1054,11 @@ pol_visit_rate <-  arrange(transform(pol_visit_rate ,focal=factor(focal,level=c(
                            focal)
 
 
-write_csv( pol_visit_rate,
-           file.path("analysis/HOI/Results",
+write.table( pol_visit_rate,
+           file.path("HOIs_Lynxc/results",
                      "pol_visit_rate.csv"), 
            na = "NA", append = F,
-           col_names =TRUE)
+           col.names =TRUE)
 
 Visitation_rate <- ggplot(pol_visit_rate , aes(y=value, x=focal, fill=as.factor(species))) + 
     #geom_bar(stat="identity",alpha= 0.8,position =position_dodge(),width=0.8) +  
@@ -1072,10 +1072,10 @@ Visitation_rate <- ggplot(pol_visit_rate , aes(y=value, x=focal, fill=as.factor(
           strip.background=element_rect(fill="white", color="white"),
           strip.text = element_text(size=10))
 
-ggsave("analysis/HOI/Figures/Visitation_rate.pdf",
+ggsave("HOIs_Lynxc/results/Visitation_rate.pdf",
        Visitation_rate, height = 5.27, width = 8.69, units = "in")
 
 ################################################################################
 # F. Procrustes analysis
 ################################################################################
-source('analysis/HOI/Code/HOI_9_Procrustes.R')
+source('HOIs_Lynxc/HOI_9_Procrustes.R')
