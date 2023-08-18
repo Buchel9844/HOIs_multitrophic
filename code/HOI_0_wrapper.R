@@ -7,39 +7,25 @@
 # Import package
 #################################################################################
 #rm(list = ls(all = TRUE))
-{install.packages("tidyverse");library(tidyverse)}
-{install.packages("dplyr");library(dplyr)}
-{install.packages("plyr");library(plyr)}
-{install.packages("ggplot2"); library(ggplot2)}
-{install.packages("ggthemes");library(ggthemes)}
-{install.packages("tibble");library(tibble)}
-#library(cowplot)
-#library(grid)
-#library(ggpubr)
-# library(gtable)
-{install.packages("RcmdrMisc");library(RcmdrMisc)}
-{install.packages("vegan");library(vegan)} # for the procrustes fonction
-{install.packages("scatterplot3d"); library(scatterplot3d)}
-{install.packages("mvtnorm"); library(mvtnorm)}
-{install.packages("igraph"); library(igraph)}
-#{install.packages("plyr"); library(plyr)}
-#if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
-{install.packages("viridis"); library(viridis)}
-{install.packages("scales"); library(scales)}
-{install.packages("deSolve"); library(deSolve)}
-{install.packages("diffeqr"); library(diffeqr)}
-{install.packages("JuliaCall"); library(JuliaCall)}
-{install.packages("boot"); library(boot)}
-{install.packages("ggplotify"); library(ggplotify)}
-{install.packages("corrplot"); library(corrplot)}
-{install.packages("RColorBrewer"); library(RColorBrewer)}
-{install.packages("ggsci"); library(ggsci)}
-{install.packages("ggtern"); library(ggtern)}
+#define packages to install
+packages <- c("magrittr", "tidyverse", "dplyr","plyr","ggplot2","ggthemes","tibble","ggpubr",
+              "RcmdrMisc","vegan","scatterplot3d","mvtnorm","igraph","viridis","scales",
+              "deSolve","diffeqr","JuliaCall","boot","ggplotify","corrplot","RColorBrewer",
+              "ggsci","ggtern","cowplot")
+
+# Magrittr for tidyverse depedency
+# ggpubr for ggarrange
+# vegan for for the procrustes fonction
+# mvtnorm for coexistence fucntions
+#install all packages that are not already installed
+install.packages(setdiff(packages, rownames(installed.packages())))
+library(packages)
+
+# install specific/complicated packages
 
 {install.packages("MASS"); library(MASS)} # for the neg binomial
 {install.packages("MuMIn"); library(MuMIn)} # for the dredge function
-library(ggpubr)
-library(cowplot)
+
 # if using "negbin-mm", you must install the "glmmADMB" packages
 {install.packages("glmmADMB", 
                  repos=c("http://glmmadmb.r-forge.r-project.org/repos",
@@ -51,7 +37,7 @@ library(cowplot)
 ################################################################################
 # A. Import the Data
 ################################################################################
-#setwd("~/Eco_Bayesian")
+#setwd("~/Downloads/HOIs_multitrophic-main")
 # read in the Fusion_Dataframe, this will create a list (fecundity.data) 
 # with two dataframes for each focal species, with and without the link
 # check if the fecundity.data is a list of 6 elements ( 6 data_frames)

@@ -38,7 +38,10 @@ year- species - treatment: treatment of the cage, determined by the number and i
 
 (self-explantory variables are not explained)
 
-Session info to run the code: R version 4.2.3 (2023-03-15)
+Session info to run the code: 
+Attention the R Version has to be higher than 4.2.
+
+R version 4.2.3 (2023-03-15)
 Platform: aarch64-apple-darwin20 (64-bit)
 Running under: macOS Ventura 13.3.1
 
