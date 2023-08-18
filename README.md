@@ -21,7 +21,7 @@ Abstract: Interactions between species are affected by the density of a third sp
 
 
 The HOI_0_wrapper.R contains all the necessary code to compute the coefficients and the AIC for each focal species and situation. The scritps are organised according to the following: 
-"code/HOI_0_wrapper.R" - calls all the following scripts in order (ordered by their name). 
+"code/HOI_0_wrapper.R" - calls all the following scripts in order (ordered by their name and runned accrdingly). 
 "code/HOI_1_Fusion_Dataframe.R" - calls the 3 datasets and creates a list (fecundity.data) with two data frames for each focal species, with and without the link; 6 in total.
 "code/HOI_2_fit_fecunfity_model.R" - contains the function running the population model.
 "code/HOI_3_Function_fit_alpha_r.R" - contains the functions which extract the Omega, centroid, theta, fesibileity domaine. 
@@ -30,7 +30,7 @@ The HOI_0_wrapper.R contains all the necessary code to compute the coefficients 
 "code/HOI_6_Procrustes.R" - creates Fig.S4
 
 The data folder contains the following .csv (i) "pollinators.csv", (ii) "2016_no_pollinators_for_2017.csv", and (iii) "used_data2017.csv". 
-"used_data2017.csv" and "2016_no_pollinators_for_2017.csv" contain the following variables:
+"used_data2017.csv" and "2016_no_pollinators_for_2017.csv" contain the 906 focal individuals for which we counted seeds, variables:
 number - link: which link of the network is present - treatment:treatment of the cage, determined by the number and identity of plants and pollinators - pot - focal: focal plant species - background_T: number of tomato individual around the focal species - background_R: number of radish individual around the focal species - background_H:  number of field bean individual around the focal species - fruit_number: number of fruit on the focal individual - exclusion - Notes - mean_weigthxseed: weight of seed for the focal individual - mean_seedsxfruit : number of seed per fruit for the focal individual - total_seeds - total_seed_weigth
 
 "pollinators.csv" contains the pollinators sampling for the 2 years, variables are: 
