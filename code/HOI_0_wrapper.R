@@ -51,12 +51,12 @@ library(cowplot)
 ################################################################################
 # A. Import the Data
 ################################################################################
-setwd("~/Eco_Bayesian")
+#setwd("~/Eco_Bayesian")
 # read in the Fusion_Dataframe, this will create a list (fecundity.data) 
-#with two dataframes for each focal species, with and without the link
-# check if the fecunfity.data is a list of 6 elements ( 6 data_frames)
-#rm(list=ls()) # remove all variable from the environement before starting the computation
-source('HOIs_Lynxc/HOI_1_Fusion_Dataframe.R')
+# with two dataframes for each focal species, with and without the link
+# check if the fecundity.data is a list of 6 elements ( 6 data_frames)
+#rm(list=ls()) # remove all variable from the environment before starting the computation
+source('code/HOI_1_Fusion_Dataframe.R')
 # the code contains check to facilitate the identification of potential mistakes
 
 ################################################################################
@@ -596,7 +596,7 @@ save(     Coefficients_alpha_r,
 # D. Persistence of species 
 ################################################################################
 # the function to create the graphs has been developped by W. Petry
-source('HOIs_Lynxc/HOI_11_pesistence.R')
+source('HOIs_Lynxc/HOI_4_pesistence.R')
 
 
 ################################################################################
@@ -606,7 +606,7 @@ source('HOIs_Lynxc/HOI_11_pesistence.R')
 # ----1. Interaction network plot ----
 
 # the function to create the graphs has been developped by W. Petry
-source('HOIs_Lynxc/HOI_10_Graphs_WPettry.R')
+source('HOIs_Lynxc/HOI_5_Graphs_WPettry.R')
 
 Interaction_network <- list()
 for(network in  c("with_link", "no_link")){
@@ -1078,4 +1078,4 @@ ggsave("HOIs_Lynxc/results/Visitation_rate.pdf",
 ################################################################################
 # F. Procrustes analysis
 ################################################################################
-source('HOIs_Lynxc/HOI_9_Procrustes.R')
+source('HOIs_Lynxc/HOI_6_Procrustes.R')

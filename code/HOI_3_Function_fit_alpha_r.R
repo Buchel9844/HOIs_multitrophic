@@ -1,3 +1,8 @@
+#R-code of "Will a small randomly-assembled community be feasible and stable?" by:
+#Chuliang Song and Serguei Saavedra
+#published in: Ecology
+
+
 require(mvtnorm)
 
 Omega <- function(alpha){

@@ -3,7 +3,7 @@
 # Import data
 #################################################################################
 #----plant seed and neighboors abundance----
-plant <- read.csv("HOIs_Lynxc/data/used_data2017.csv")
+plant <- read.csv("data/used_data2017.csv")
 plant <- subset(plant,
                   select=c("link" ,"treatment","pot","focal",
                            "background_T","background_R","background_H",
@@ -26,7 +26,7 @@ for ( poll in pollinator.id){
 # str(plant) --> 738 obs. of  16 variables
 
 #---- pollinator abundance----
-plant_with_pollinators <- read.csv("HOIs_Lynxc/data/pollinators.csv")
+plant_with_pollinators <- read.csv("data/pollinators.csv")
 plant_with_pollinators <- data.frame(plant_with_pollinators[102:nrow(plant_with_pollinators),])
 
 # separate the information in the column "measure"
@@ -69,7 +69,7 @@ plant.id <- c("Raphanus","Vicia","Tomato")
 # str(plant_with_pollinators) --> 45 obs. of  5 variables
 
 #----plant seed and neighboors abundance wihtout pollinators----
-plant_no_pollinator <- read.csv("HOIs_Lynxc/data/2016_no_pollinators_for_2017.csv")
+plant_no_pollinator <- read.csv("data/2016_no_pollinators_for_2017.csv")
 
 plant_no_pollinator <- subset(plant_no_pollinator,
                               select=c("link" ,"treatment","pot","focal",
