@@ -217,10 +217,10 @@ for(plant.spc in plant.id){
 }
 
 save(fecundity.data,
-     file = "HOIs_Lynxc/results/fecundity_data.RData")
+     file = "results/fecundity_data.RData")
 
 
-ggplot2::ggsave("HOIs_Lynxc/results/VisitationRate_standardisation.pdf",
+ggplot2::ggsave("results/VisitationRate_standardisation.pdf",
   ggarrange(plotlist = VR.plot, common.legend = T, legend="bottom"),
   width = 11.20,height = 5.56, units = "in")
 # Check 6
@@ -231,7 +231,7 @@ ggplot2::ggsave("HOIs_Lynxc/results/VisitationRate_standardisation.pdf",
 #################################################################################
 View(plant_pollinator)
 write.table(plant_pollinator,
-          file.path("HOIs_Lynxc/results/plant_pollinator_2016_2017.csv"), 
+          file.path("results/plant_pollinator_2016_2017.csv"), 
           na = "NA", append = F,
           col.names =TRUE)
 fecundity.data$Raphanus_with_link

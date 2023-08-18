@@ -220,7 +220,7 @@ for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
         
         
         # save results ------------------------------
-        write.table(df, paste0("HOIs_Lynxc/results/predicting_surv_sp_",paste(network,HOIs,sep='_'), 
+        write.table(df, paste0("results/predicting_surv_sp_",paste(network,HOIs,sep='_'), 
                              ".csv", sep = ""), 
                   row.names = FALSE)
     
@@ -285,7 +285,7 @@ for(network in  c("with_link", "no_link")){
   
   str(df)
     write.table(df, 
-                 file.path(paste0("HOIs_Lynxc/results/predicting_surv_sp_noStd_",network,HOIs, 
+                 file.path(paste0("results/predicting_surv_sp_noStd_",network,HOIs, 
                            ".csv", sep = "")),
                  na = "NA", append = F,
                  col.names =TRUE)
@@ -327,11 +327,11 @@ for(network in  c("with_link", "no_link")){
         
         # reading results file ------------------------------
         head(   df_classic)
-        df_classic <- read.csv(paste0("HOIs_Lynxc/results/predicting_surv_sp_", paste0(network,"_",HOIs), 
+        df_classic <- read.csv(paste0("results/predicting_surv_sp_", paste0(network,"_",HOIs), 
                                       ".csv"),sep=' ')
         if(noStd==T){
           if(!HOIs == "no_HOIs") next
-          df_classic <- read.csv(paste0("HOIs_Lynxc/results/predicting_surv_sp_noStd_",network,HOIs, 
+          df_classic <- read.csv(paste0("results/predicting_surv_sp_noStd_",network,HOIs, 
                                         ".csv"),sep=' ')
           network <- paste0("noStd_",network)
         }
@@ -384,10 +384,10 @@ for(network in  c("with_link", "no_link")){
         # build full data frame with all types of dynamics ------------------------------
         sp_sum_df <- sp_sum_df_classic
         
-        write.csv(sp_sum_df, paste0("HOIs_Lynxc/results/probability_surv_sp_", paste(network,HOIs,sep='_'), 
+        write.csv(sp_sum_df, paste0("results/probability_surv_sp_", paste(network,HOIs,sep='_'), 
                                     ".csv", sep = ""), 
                   row.names = FALSE)
-        write.csv(df_classic , paste0("HOIs_Lynxc/results/probability_df_classic_", paste(network,HOIs,sep='_'), 
+        write.csv(df_classic , paste0("results/probability_df_classic_", paste(network,HOIs,sep='_'), 
                                     ".csv", sep = ""), 
                   row.names = FALSE)
         summary.prob.sp.i <- data.frame(summary(df_classic$surv_sp)/nrow(df_classic))
@@ -436,11 +436,11 @@ for(network in  c("with_link", "no_link")){
         # note: here ggarange does not work bc we work with ggterm and not ggplot
         if(colorblind == T){
           predicting_surv_sp_colorblind[[paste(network,HOIs,sep="_")]] <- fig_A
-          ggsave(paste0("HOIs_Lynxc/results/Colorblind_",network,HOIs,".png"),fig_A,
+          ggsave(paste0("results/Colorblind_",network,HOIs,".png"),fig_A,
                  width = 5.8,height = 5.2, units = "in")
         }else{
         predicting_surv_sp[[paste(network,HOIs,sep="_")]] <- fig_A
-        ggsave(paste0("HOIs_Lynxc/results/",network,HOIs,".png"),fig_A,
+        ggsave(paste0("results/",network,HOIs,".png"),fig_A,
                width = 5.8,height = 5.2, units = "in")
         }
         
@@ -448,7 +448,7 @@ for(network in  c("with_link", "no_link")){
     }
 }
 
-write.csv(  summary.prob.sp , paste0("HOIs_Lynxc/results/summary.prob.sp", 
+write.csv(summary.prob.sp , paste0("results/summary.prob.sp", 
                               ".csv", sep = ""), 
           row.names = T)
 plot(predicting_surv_sp[[paste(network,HOIs,sep="_")]])
@@ -466,7 +466,7 @@ legend.plot <- ggplot(data = df_classic,
     scale_color_manual(values = pal_set1, #limit=levels(df_classic$surv_sp),
                        name = "Observed\nensemble")
 
-ggsave("HOIs_Lynxc/results/predicting_surv_sp_legend.png",
+ggsave("results/predicting_surv_sp_legend.png",
        plot=plot(get_legend(legend.plot)), 
        width = 7.53, height =3.68, units = "in")
 
@@ -484,12 +484,12 @@ legend.plot.colorblind <- ggplot(data = df_classic,
 
 
 
-ggsave("HOIs_Lynxc/results/predicting_surv_sp_legend_colorblind.png",
+ggsave("results/predicting_surv_sp_legend_colorblind.png",
        plot=plot(get_legend(legend.plot.colorblind )), units = "in")
 
 
 library(ggpubr)
-ggsave("HOIs_Lynxc/results/predicting_surv_sp.png",
+ggsave("results/predicting_surv_sp.png",
        plot=ggarrange(plotlist=predicting_surv_sp, ncol=3,row=3,
                       common.legend = T,legend="bottom"), units = "in")
 

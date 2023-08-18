@@ -100,7 +100,7 @@ boot.model <- boot.model %>%
     ))
 
 write.table( boot.model,
-              "HOIs_Lynxc/results/boot.model.csv", 
+              "results/boot.model.csv", 
               na = "NA", append = F)
     
 
@@ -133,7 +133,7 @@ density.procrustes.plot <- ggplot(boot.model, aes(x=Correlation)) +
 
 
 
-ggsave("HOIs_Lynxc/results/density.procrustes.plot.pdf",
+ggsave("results/density.procrustes.plot.pdf",
            plot=density.procrustes.plot,
            height = 8.27, width = 11.69, units = "in")
 

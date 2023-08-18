@@ -343,13 +343,13 @@ names(dredge.df.with.HOIs.long)[!names(dredge.df.with.HOIs.long) %in% col.order]
 
 
 write.table(dredge.df,
-          file.path("HOIs_Lynxc/results/dredge.result.csv"), 
+          file.path("results/dredge.result.csv"), 
           na = "NA", append = F,
           col.names =TRUE)
 
 
 write.table(dredge.df.with.HOIs.long,
-          file.path("HOIs_Lynxc/results/dredge.df.with.HOIs.long.csv"), 
+          file.path("results/dredge.df.with.HOIs.long.csv"), 
           na = "NA", append = F,
           col.names =TRUE)
 
@@ -361,7 +361,7 @@ write.table(dredge.df.with.HOIs.long,
 
 # read in the model-fitting function - function provided with manuscript
 # check if the fit.fecundity is a function 
-source('HOIs_Lynxc/HOI_2_fit_fecunfity_model.R')
+source('HOI_2_fit_fecunfity_model.R')
 full_model_Coefficient <- data.frame()
 full.model.of.plant.spc <- list()
 for( plant.spc in plant.id){
@@ -423,12 +423,12 @@ all.coeff.newnames <- arrange(transform(all.coeff.newnames,
                      species)
 all.coeff.newnames <- all.coeff.newnames%>% mutate_if(is.numeric, round, digits=3)
 write.table(all.coeff,
-          file.path("HOIs_Lynxc/results",
+          file.path("results",
                     "all.coeff.csv"), 
           na = "NA", append = F,
           col.names =TRUE)
 
-#all.coeff <- read.csv("HOIs_Lynxc/results/all.coeff.csv",sep=' ')
+#all.coeff <- read.csv("results/all.coeff.csv",sep=' ')
 
 # ---- graph of both type of response ----
 data.raphanus <- fecundity.data[[paste("Raphanus", "with_link", sep="_")]]
@@ -440,7 +440,7 @@ data.raphanus$fitted.value.type.I <-  raphanus.model.type$model.type.I$fitted.va
 data.raphanus$visit <- exp((data.raphanus$Bombus_terrestris-1)*(maxpol.log/maxplant)) + exp((data.raphanus$Lucilia_sericata -1)*(maxpol.log/maxplant)) + exp((data.raphanus$Osmia_bicornis-1)*(maxpol.log/maxplant))
 
 write.table(data.raphanus,
-          file.path("HOIs_Lynxc/results",
+          file.path("results",
                     "data.raphanus.csv"), 
           na = "NA", append = F,
           col.names =TRUE)
@@ -456,7 +456,7 @@ plot.function.type <- ggplot(data=data.raphanus, aes(y=seeds)) +
     stat_smooth(aes(x=fitted.value.type.II),method="loess", se = FALSE,color="blue") +
 
     theme_bw() 
-ggsave("HOIs_Lynxc/results/plot.function.type.pdf",
+ggsave("results/plot.function.type.pdf",
        plot.function.type)
 
 
@@ -569,7 +569,7 @@ for(network in  c("with_link", "no_link")){
 
 # ---- 2. Compute Omega, centroid, theta, fesibileity domaine , test_feasibility_pairs and compute_overlap ----
 
-source('HOIs_Lynxc/HOI_3_Function_fit_alpha_r.R')
+source('HOI_3_Function_fit_alpha_r.R')
 for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
     for(network in  c("with_link", "no_link")){
         alpha <- Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$alpha
@@ -588,15 +588,15 @@ for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
 
 # ---- 3. save data in RData file ----
 save(     Coefficients_alpha_r, 
-          file="HOIs_Lynxc/results/Coefficients_alpha_r.RData")
-#load("HOIs_Lynxc/results/Coefficients_alpha_r.RData")
+          file="results/Coefficients_alpha_r.RData")
+#load("results/Coefficients_alpha_r.RData")
 
 
 ################################################################################
 # D. Persistence of species 
 ################################################################################
 # the function to create the graphs has been developped by W. Petry
-source('HOIs_Lynxc/HOI_4_pesistence.R')
+source('HOI_4_pesistence.R')
 
 
 ################################################################################
@@ -606,7 +606,7 @@ source('HOIs_Lynxc/HOI_4_pesistence.R')
 # ----1. Interaction network plot ----
 
 # the function to create the graphs has been developped by W. Petry
-source('HOIs_Lynxc/HOI_5_Graphs_WPettry.R')
+source('HOI_5_Graphs_WPettry.R')
 
 Interaction_network <- list()
 for(network in  c("with_link", "no_link")){
@@ -615,7 +615,7 @@ for(network in  c("with_link", "no_link")){
         mk_graph_3sp(Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$alpha, 
                      Coefficients_alpha_r[[paste(network,HOIs,sep='_')]]$r)
         Interaction_network[[paste(network,HOIs,sep='_')]] <- last_plot()
-        ggsave(paste0("HOIs_Lynxc/results/","network_interaction_", network,HOIs,".pdf"),
+        ggsave(paste0("results/","network_interaction_", network,HOIs,".pdf"),
                last_plot(),
                width = 2.6,height = 2.6, units = "in")
     }
@@ -623,11 +623,11 @@ for(network in  c("with_link", "no_link")){
 
 plot.sp.interaction.with_link <- ggarrange(plotlist=Interaction_network[1:3],ncol=3,nrow=1)
 
-ggsave("HOIs_Lynxc/results/plot.sp.interaction.with_link.pdf",
+ggsave("results/plot.sp.interaction.with_link.pdf",
        plot.sp.interaction.with_link, height = 3, width = 9, units = "in")
 
 plot.sp.interaction.network <- ggarrange(plotlist=Interaction_network[4:6],ncol=3,nrow=1)
-ggsave("HOIs_Lynxc/results/plot.sp.interaction.no_link.pdf",
+ggsave("results/plot.sp.interaction.no_link.pdf",
        plot.sp.interaction.network,  height = 3, width = 9, units = "in")
 
 # ----2. Graph of the effect of direct int vs HOIs -----
@@ -767,7 +767,7 @@ graph.dredge.interaction <- drop_na(graph.dredge.interaction,value.sd)
 
 view(graph.dredge.interaction)
 write.table(graph.dredge.interaction,
-          "HOIs_Lynxc/results/graph.dredge.interaction.csv")
+          "results/graph.dredge.interaction.csv")
 # ---- 2.a. Test for diff between sd and HOIs effect ----
 graph.dredge.interaction.alpha <- graph.dredge.interaction[graph.dredge.interaction$effect=="alpha",]
 graph.dredge.interaction.beta.pol <- graph.dredge.interaction[graph.dredge.interaction$effect=="beta.pol",]
@@ -837,7 +837,7 @@ for(HOIs in  c("Pairwise interactions","Selected HOIs","All HOIs")){
 }
 view(df.effect.HOIs)
 write.table(df.effect.HOIs,
-          "HOIs_Lynxc/results/df.effect.HOIs.csv")
+          "results/df.effect.HOIs.csv")
 
 
 # ---- 2.b. Final values of alpha matrix ----
@@ -898,7 +898,7 @@ coefficient.dredge_comparison.full[which(coefficient.dredge_comparison.full$alph
 
 
 write.table(coefficient.dredge_comparison.full,
-          "HOIs_Lynxc/results/coefficient.dredge_comparison.full.csv")
+          "results/coefficient.dredge_comparison.full.csv")
 
 # ---- 2.c. Plot ----
 
@@ -942,7 +942,7 @@ effect.dredge_interaction <- ggplot() + geom_bar(stat="identity",
     theme(axis.text.x = element_text(angle = 68,vjust = 0.5),
           strip.background=element_rect(fill="white", color="white"),
           strip.text = element_text(size=10)) 
-ggsave("HOIs_Lynxc/results/effect.dredge_interaction.pdf",
+ggsave("results/effect.dredge_interaction.pdf",
        effect.dredge_interaction,height = 8.27, width = 15.69, units = "in")
 
 
@@ -969,14 +969,14 @@ Overall_effect_HOIs <- ggplot(data=graph.dredge.interaction,
 
 
 
-ggsave("HOIs_Lynxc/results/Overall_effect_HOIs.pdf",
+ggsave("results/Overall_effect_HOIs.pdf",
        Overall_effect_HOIs, height = 7.27, width = 8.69, units = "in")
 
 # ----3. Graph of the persistence ----
 df_prob_surv <- data.frame()
 for ( network in   c("with_link","no_link")){
     for(HOIs in  c("with_HOIs","no_HOIs","full_model")){
-        df_surv_i <-read.csv(paste0("HOIs_Lynxc/results/probability_surv_sp_", paste(network,HOIs,sep="_"), 
+        df_surv_i <-read.csv(paste0("results/probability_surv_sp_", paste(network,HOIs,sep="_"), 
                                     ".csv", sep = ""))
         df_surv_i$model <-  HOIs 
         df_surv_i$network <-network
@@ -992,7 +992,7 @@ df_prob_surv<- arrange(transform(df_prob_surv,
                        model)
 
 write.table(df_prob_surv,
-          "HOIs_Lynxc/results/df_prob_surv.csv")
+          "results/df_prob_surv.csv")
 
 #df_prob_surv <- subset(df_prob_surv,model== model.name[1])
 df_prob_surv$network <- as.factor(df_prob_surv$network)
@@ -1021,7 +1021,7 @@ plot_prob_surv <- ggplot(df_prob_surv, aes(y=frac, x= sp, fill=model,
     guides(color= "none",fill = guide_legend(override.aes = list(alpha=0.6)))
 
 
-ggsave("HOIs_Lynxc/results/plot_prob_surv.pdf",
+ggsave("results/plot_prob_surv.pdf",
        plot_prob_surv, height = 3.68, width = 8.51, units = "in")
 
 
@@ -1055,7 +1055,7 @@ pol_visit_rate <-  arrange(transform(pol_visit_rate ,focal=factor(focal,level=c(
 
 
 write.table( pol_visit_rate,
-           file.path("HOIs_Lynxc/results",
+           file.path("results",
                      "pol_visit_rate.csv"), 
            na = "NA", append = F,
            col.names =TRUE)
@@ -1072,10 +1072,10 @@ Visitation_rate <- ggplot(pol_visit_rate , aes(y=value, x=focal, fill=as.factor(
           strip.background=element_rect(fill="white", color="white"),
           strip.text = element_text(size=10))
 
-ggsave("HOIs_Lynxc/results/Visitation_rate.pdf",
+ggsave("results/Visitation_rate.pdf",
        Visitation_rate, height = 5.27, width = 8.69, units = "in")
 
 ################################################################################
 # F. Procrustes analysis
 ################################################################################
-source('HOIs_Lynxc/HOI_6_Procrustes.R')
+source('HOI_6_Procrustes.R')
