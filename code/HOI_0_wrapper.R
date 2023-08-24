@@ -7,6 +7,9 @@
 # Import package
 #################################################################################
 #rm(list = ls(all = TRUE))
+install.packages("renv")
+library(renv)
+init()
 #define packages to install
 packages <- c("magrittr", "tidyverse", "dplyr","plyr","ggplot2","ggthemes","tibble","ggpubr",
               "RcmdrMisc","vegan","scatterplot3d","mvtnorm","igraph","viridis","scales",
@@ -44,6 +47,8 @@ library(packages)
 #rm(list=ls()) # remove all variable from the environment before starting the computation
 source('code/HOI_1_Fusion_Dataframe.R')
 # the code contains check to facilitate the identification of potential mistakes
+
+
 
 ################################################################################
 # B. Run the models with the dredge and estimate the parameters
