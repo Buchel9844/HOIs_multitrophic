@@ -1,6 +1,6 @@
 Code of the article entitled "Multitrophic higher-order interactions modulate species persistence" by Lisa Buche, Ignasi Bartomeus and Oscar Godoy (https://www.biorxiv.org/content/10.1101/2021.11.18.469079v1.abstract). 
 
-Buche, L. Bartomeus,I and Godoy, O (2023), Buchel9844/HOIs_multitrophic: Initial release (v0.1). Zenodo. DOI: 10.5281/zenodo.8260136
+Buche, L. Bartomeus,I and Godoy, O (2023), Buchel9844/HOIs_multitrophic: Initial release (v.1). Zenodo. DOI: [10.5281/zenodo.10146602](https://zenodo.org/records/10146602)
 
 Contact details: Lisa Buche (buchel9844@gmail.com or lbuche@student.unimelb.edu.au); Ignasi Bartomeus (nacho.bartomeus@gmail.com); Oscar Godoy (oscar.godoy@uca.edu.es)
 
