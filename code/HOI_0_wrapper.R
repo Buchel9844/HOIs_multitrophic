@@ -7,14 +7,12 @@
 # Import package
 #################################################################################
 #rm(list = ls(all = TRUE))
-install.packages("renv")
-library(renv)
-init()
+
 #define packages to install
 packages <- c("magrittr", "tidyverse", "dplyr","plyr","ggplot2","ggthemes","tibble","ggpubr",
               "RcmdrMisc","vegan","scatterplot3d","mvtnorm","igraph","viridis","scales",
               "deSolve","diffeqr","JuliaCall","boot","ggplotify","corrplot","RColorBrewer",
-              "ggsci","ggtern","cowplot")
+              "ggsci","ggtern","cowplot","dataspice")
 
 # Magrittr for tidyverse depedency
 # ggpubr for ggarrange
@@ -22,7 +20,8 @@ packages <- c("magrittr", "tidyverse", "dplyr","plyr","ggplot2","ggthemes","tibb
 # mvtnorm for coexistence fucntions
 #install all packages that are not already installed
 install.packages(setdiff(packages, rownames(installed.packages())))
-library(packages)
+
+lapply(packages, library, character.only = TRUE)
 
 # install specific/complicated packages
 
